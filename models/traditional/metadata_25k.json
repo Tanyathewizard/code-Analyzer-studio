@@ -1,0 +1,40 @@
+{
+  "dataset": {
+    "total_samples": 25000,
+    "training_samples": 17500,
+    "test_samples": 7500,
+    "train_percentage": 70,
+    "test_percentage": 30,
+    "n_features": 10
+  },
+  "features": [
+    "token_count",
+    "line_count",
+    "avg_line_length",
+    "nesting_depth",
+    "cyclomatic_complexity",
+    "num_functions",
+    "num_classes",
+    "num_branches",
+    "num_loops",
+    "num_comments"
+  ],
+  "quality_stats": {
+    "mean": 83.95607929717183,
+    "std": 11.758802474553814,
+    "min": 28.277434347915147,
+    "max": 100.0
+  },
+  "anti_overfitting_measures": [
+    "25,000 large dataset",
+    "70/30 train/test split",
+    "max_depth=6 (very shallow RF)",
+    "min_samples_split=50",
+    "min_samples_leaf=20",
+    "max_features=0.5",
+    "C=0.1 (SVM)",
+    "C=0.01 (LogReg)",
+    "alpha=100 (Ridge)",
+    "Label noise: \u00b112 + 10% flipping"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+    "summary": {
+        "overall_grade": "Average",
+        "overall_score": 79.59,
+        "total_issues": 0,
+        "critical_issues": 0
+    },
+    "metrics": {
+        "readability_score": 81.6475,
+        "avg_line_length": 28.675,
+        "naming_convention_score": 100.0,
+        "comment_ratio": 0.025,
+        "cyclomatic_complexity": 7,
+        "cognitive_complexity": 63,
+        "nesting_depth": 3,
+        "maintainability_index": 95.38096415850364,
+        "code_duplication_ratio": 0.0,
+        "function_length_avg": 6.5,
+        "algorithmic_efficiency": "Linear or better",
+        "memory_patterns": [],
+        "performance_issues": [],
+        "security_vulnerabilities": [],
+        "unsafe_patterns": [],
+        "overall_grade": "Average",
+        "overall_score": 79.59044937295924
+    },
+    "issues": [],
+    "recommendations": [
+        "Add more comments"
+    ]
+}

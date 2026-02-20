@@ -1,0 +1,101 @@
+{
+  "dataset_size": 25000,
+  "training_samples": 17500,
+  "test_samples": 7500,
+  "train_percentage": 70,
+  "test_percentage": 30,
+  "n_features": 10,
+  "feature_names": [
+    "token_count",
+    "line_count",
+    "avg_line_length",
+    "nesting_depth",
+    "cyclomatic_complexity",
+    "num_functions",
+    "num_classes",
+    "num_branches",
+    "num_loops",
+    "num_comments"
+  ],
+  "quality_stats": {
+    "mean": 99.34987793079401,
+    "std": 2.4463910706172682,
+    "min": 56.615677959821454,
+    "max": 100.0
+  },
+  "issue_types": {
+    "0": "Minor",
+    "1": "Moderate",
+    "2": "Severe",
+    "3": "Critical"
+  },
+  "models_trained": [
+    "random_forest_regressor",
+    "random_forest_classifier",
+    "svm_regressor",
+    "svm_classifier",
+    "logistic_regression",
+    "ridge_regression",
+    "knn_regressor",
+    "xgboost_regressor",
+    "xgboost_classifier"
+  ],
+  "training_results": {
+    "random_forest_regressor": {
+      "train_r2": 0.6929416140417564,
+      "test_r2": 0.2240487932232016,
+      "rmse": 2.0209671228173,
+      "gap": 0.46889282081855477
+    },
+    "random_forest_classifier": {
+      "train_accuracy": 0.9995428571428572,
+      "test_accuracy": 0.9996,
+      "gap": -5.714285714286671e-05
+    },
+    "svm_regressor": {
+      "train_r2": 0.4848960564599646,
+      "test_r2": 0.12873404250326248,
+      "rmse": 2.141496725726909,
+      "gap": 0.3561620139567021
+    },
+    "svm_classifier": {
+      "train_accuracy": 1.0,
+      "test_accuracy": 0.9993333333333333,
+      "gap": 0.0006666666666667043
+    },
+    "logistic_regression": {
+      "train_accuracy": 0.9995428571428572,
+      "test_accuracy": 0.9996,
+      "gap": -5.714285714286671e-05
+    },
+    "ridge_regression": {
+      "train_r2": 0.09525692414850406,
+      "test_r2": 0.08751803966190719,
+      "rmse": 2.191564140328347,
+      "gap": 0.007738884486596875
+    },
+    "knn_regressor": {
+      "train_r2": 0.41760912160013874,
+      "test_r2": 0.10238420347248467,
+      "rmse": 2.173638337923334,
+      "gap": 0.3152249181276541
+    },
+    "xgboost_regressor": {
+      "train_r2": 0.755751172754846,
+      "test_r2": 0.23033855078732068,
+      "rmse": 2.0127596110011026,
+      "gap": 0.5254126219675254
+    },
+    "xgboost_classifier": {
+      "train_accuracy": 0.9996571428571429,
+      "test_accuracy": 0.9996,
+      "gap": 5.714285714286671e-05
+    }
+  },
+  "cross_validation": {
+    "random_forest_regressor_cv_mean": 0.256823048186933,
+    "random_forest_regressor_cv_std": 0.03320643518236101,
+    "random_forest_classifier_cv_mean": 0.9995428571428571,
+    "random_forest_classifier_cv_std": 0.00013997084244472209
+  }
+}
