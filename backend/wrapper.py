@@ -4,7 +4,10 @@ import time
 import requests
 import logging
 from dotenv import load_dotenv
-import google.generativeai as gen
+try:
+    import google.generativeai as gen
+except:
+    gen = None
 from openai import OpenAI
 from api_config import APIConfig
 from api_limiter import apply_rate_limit, should_use_cache, cache_result
