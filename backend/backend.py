@@ -36,7 +36,7 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 # Wrapper and Database
 try:
-    from wrapper import gemini_analyze_code, llama_extract_json, extract_json
+    from backend.wrapper import gemini_analyze_code, llama_extract_json, extract_json
     WRAPPER_DB_AVAILABLE = False
 except Exception:
     logger.exception("Wrapper import failed")
@@ -44,10 +44,10 @@ except Exception:
 
 # Local graph/IR builders
 try:
-    from cfg_builder import build_cfg
-    from dfg_builder import build_dfg
-    from graph_generator import generate_graphs, generate_cfg_svg, generate_dfg_svg
-    from symbol_table import build_symbol_table
+   from backend.cfg_builder import build_cfg
+   from backend.dfg_builder import build_dfg
+   from backend.graph_generator import generate_graphs, generate_cfg_svg, generate_dfg_svg
+   from backend.symbol_table import build_symbol_table
     GRAPH_TOOLS_AVAILABLE = True
 except Exception:
     logger.exception("Failed to import graph/IR builder modules")
@@ -55,7 +55,7 @@ except Exception:
 
 # UML Generator
 try:
-    from uml_generator import generate_uml
+    from backend.uml_generator import generate_uml
     UML_GENERATOR_AVAILABLE = True
 except Exception:
     logger.exception("Could not import UML generator")
@@ -63,7 +63,7 @@ except Exception:
 
 # Semantic to UML Converter
 try:
-    from semantic_to_uml import semantic_to_uml
+   from backend.semantic_to_uml import semantic_to_uml
     SEMANTIC_TO_UML_AVAILABLE = True
 except Exception:
     logger.exception("Could not import semantic_to_uml")
@@ -71,9 +71,9 @@ except Exception:
 
 # Import analysis agents
 try:
-    from semantic_extractor import SemanticExtractor
-    from quality_agent import CodeQualityEvaluator
-    from analyzer_agent import UnifiedAnalyzer
+    from backend.semantic_extractor import SemanticExtractor
+    from backend.quality_agent import CodeQualityEvaluator  
+    from backend.analyzer_agent import UnifiedAnalyzer
     AGENTS_AVAILABLE = True
 except Exception:
     logger.exception("Could not import analysis agents (semantic_extractor, quality_agent, analyzer_agent)")
@@ -81,8 +81,8 @@ except Exception:
 
 # ML Models Integration
 try:
-    from ml_traditional import TraditionalMLModels
-    from ml_data import CodeFeatureExtractor
+   from backend.ml_traditional import TraditionalMLModels
+   from backend.ml_data import CodeFeatureExtractor
     import numpy as np
     ML_AVAILABLE = True
 except Exception:
