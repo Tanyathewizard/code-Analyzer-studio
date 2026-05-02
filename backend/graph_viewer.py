@@ -1,5 +1,5 @@
 # graph_viewer.py
-from graph_generator import generate_graphs
+from backend.graph_generator import generate_graphs
 import json
 import os
 
