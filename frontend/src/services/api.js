@@ -1,21 +1,17 @@
+// Resolve backend API URL
 const resolveApiUrl = () => {
-    // Vite environment variable (always available in Vite)
-    if (
-        import.meta.env &&
-        import.meta.env.VITE_ANALYZER_API) {
+    // 1️⃣ Use Vercel environment variable if available
+    if (import.meta.env?.VITE_ANALYZER_API) {
         return import.meta.env.VITE_ANALYZER_API;
     }
-    // If running in browser, use current host
-    if (typeof window !== 'undefined') {
-        const { protocol, hostname } = window.location;
-        return `${protocol}//${hostname}:8000`;
-    }
-    // Default fallback
-    return 'http://localhost:8000';
+
+    // 2️⃣ Fallback to your deployed Render backend
+    return "https://code-analyzer-studio.onrender.com";
 };
 
-const API_BASE_URL = resolveApiUrl()
+const API_BASE_URL = resolveApiUrl();
 
+// Mock fallback (used only if backend fails)
 const mockAnalysis = (code) => ({
     success: true,
     data: {
@@ -30,8 +26,9 @@ const mockAnalysis = (code) => ({
     },
     analysis_type: 'all',
     _usingMockData: true,
-})
+});
 
+// 🔹 MAIN ANALYSIS
 export async function analyzeCode(code, language, analysisType = 'all') {
     try {
         const response = await fetch(`${API_BASE_URL}/api/analyze`, {
@@ -42,25 +39,27 @@ export async function analyzeCode(code, language, analysisType = 'all') {
                 file_type: language,
                 analysis_type: analysisType,
             }),
-        })
+        });
 
         if (!response.ok) {
-            throw new Error(`Backend returned ${response.status}`)
+            throw new Error(`Backend returned ${response.status}`);
         }
 
-        const data = await response.json()
+        const data = await response.json();
 
         if (!data.success) {
-            throw new Error(data.error || 'Analysis failed')
+            throw new Error(data.error || 'Analysis failed');
         }
 
-        return data
+        return data;
+
     } catch (error) {
-        console.warn('Analyze request failed, returning mock data.', error)
-        return mockAnalysis(code)
+        console.warn('Analyze request failed, returning mock data.', error);
+        return mockAnalysis(code);
     }
 }
 
+// 🔹 SEMANTIC ANALYSIS
 export async function semanticAnalysis(code, language) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/semantic-analysis`, {
@@ -70,19 +69,21 @@ export async function semanticAnalysis(code, language) {
                 code,
                 file_type: language,
             }),
-        })
+        });
 
         if (!response.ok) {
-            throw new Error(`Backend returned ${response.status}`)
+            throw new Error(`Backend returned ${response.status}`);
         }
 
-        return await response.json()
+        return await response.json();
+
     } catch (error) {
-        console.warn('Semantic analysis request failed', error)
-        throw error
+        console.warn('Semantic analysis request failed', error);
+        throw error;
     }
 }
 
+// 🔹 QUALITY ANALYSIS
 export async function qualityAnalysis(code, language) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/quality-analysis`, {
@@ -92,19 +93,21 @@ export async function qualityAnalysis(code, language) {
                 code,
                 file_type: language,
             }),
-        })
+        });
 
         if (!response.ok) {
-            throw new Error(`Backend returned ${response.status}`)
+            throw new Error(`Backend returned ${response.status}`);
         }
 
-        return await response.json()
+        return await response.json();
+
     } catch (error) {
-        console.warn('Quality analysis request failed', error)
-        throw error
+        console.warn('Quality analysis request failed', error);
+        throw error;
     }
 }
 
+// 🔹 UNIFIED ANALYSIS
 export async function unifiedAnalysis(code, language) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/unified-analysis`, {
@@ -114,24 +117,26 @@ export async function unifiedAnalysis(code, language) {
                 code,
                 file_type: language,
             }),
-        })
+        });
 
         if (!response.ok) {
-            throw new Error(`Backend returned ${response.status}`)
+            throw new Error(`Backend returned ${response.status}`);
         }
 
-        return await response.json()
+        return await response.json();
+
     } catch (error) {
-        console.warn('Unified analysis request failed', error)
-        throw error
+        console.warn('Unified analysis request failed', error);
+        throw error;
     }
 }
 
+// 🔹 HEALTH CHECK
 export async function getHealth() {
     try {
-        const response = await fetch(`${API_BASE_URL}/health`)
-        return response.ok
+        const response = await fetch(`${API_BASE_URL}/health`);
+        return response.ok;
     } catch (error) {
-        return false
+        return false;
     }
 }
