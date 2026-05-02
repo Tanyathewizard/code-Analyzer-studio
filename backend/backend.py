@@ -37,10 +37,9 @@ class CustomJSONEncoder(json.JSONEncoder):
 # Wrapper and Database
 try:
     from wrapper import gemini_analyze_code, llama_extract_json, extract_json
-    from env11.database import init_db, save_analysis, get_analysis_by_id, search_by_keyword
-    WRAPPER_DB_AVAILABLE = True
+    WRAPPER_DB_AVAILABLE = False
 except Exception:
-    logger.exception("Failed to import wrapper or database module")
+    logger.exception("Wrapper import failed")
     WRAPPER_DB_AVAILABLE = False
 
 # Local graph/IR builders
@@ -1275,7 +1274,7 @@ async def detailed_metrics(request: AnalysisRequest):
 if __name__ == "__main__":
     host = os.getenv("HOST", "127.0.0.1")
     port = int(os.getenv("PORT", 8000))
-    reload = os.getenv("RELOAD", "True").lower() == "true"
+   reload = False
     
     logger.info(f"Starting server at {host}:{port}")
     
