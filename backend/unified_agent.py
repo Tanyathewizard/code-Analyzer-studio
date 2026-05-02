@@ -5,8 +5,8 @@ Unified analyzer that uses:
  - SemanticExtractor (calls LLaMA for Python, Gemini for other languages)
 """
 
-from ir_model import IRModel
-from semantic_extractor import SemanticExtractor
+from backend.ir_model import IRModel
+from backend.semantic_extractor import SemanticExtractor
 
 
 class UnifiedAnalyzer:
