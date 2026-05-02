@@ -15,4 +15,4 @@ uvicorn
 pydantic
 plantuml
 openai
-
+python-multipart
