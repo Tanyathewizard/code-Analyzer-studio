@@ -11,7 +11,7 @@ import logging
 import os
 from typing import Any, Callable, Optional
 
-from api_config import APIConfig
+from backend.api_config import APIConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
