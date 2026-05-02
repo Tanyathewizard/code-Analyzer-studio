@@ -122,10 +122,11 @@ async def startup_event():
     logger.info("Starting AI Analysis Backend")
     logger.info(f"API Key configured: {bool(get_api_key())}")
 
-# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://code-analyzer-studio.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
