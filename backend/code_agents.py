@@ -1,6 +1,6 @@
 import json
-from agents_base import AssistantAgent, UserProxyAgent
-from semantic_extractor import SemanticExtractor
+from backend.agents_base import AssistantAgent, UserProxyAgent
+from backend.semantic_extractor import SemanticExtractor
 
 class CodeAnalyzerAgent(AssistantAgent):
     def __init__(self, name="code_analyzer"):
