@@ -62,10 +62,11 @@ except Exception:
     logger.exception("Could not import UML generator")
     UML_GENERATOR_AVAILABLE = False
 
+
 # Semantic to UML Converter
 try:
-   from backend.semantic_to_uml import semantic_to_uml
-    SEMANTIC_TO_UML_AVAILABLE = True
+    from backend.uml_generator import generate_uml
+    UML_GENERATOR_AVAILABLE = True
 except Exception:
     logger.exception("Could not import semantic_to_uml")
     SEMANTIC_TO_UML_AVAILABLE = False
@@ -73,7 +74,7 @@ except Exception:
 # Import analysis agents
 try:
     from backend.semantic_extractor import SemanticExtractor
-    from backend.quality_agent import CodeQualityEvaluator  
+    from backend.quality_agent import CodeQualityEvaluator
     from backend.analyzer_agent import UnifiedAnalyzer
     AGENTS_AVAILABLE = True
 except Exception:
@@ -82,8 +83,8 @@ except Exception:
 
 # ML Models Integration
 try:
-   from backend.ml_traditional import TraditionalMLModels
-   from backend.ml_data import CodeFeatureExtractor
+    from backend.ml_traditional import TraditionalMLModels
+    from backend.ml_data import CodeFeatureExtractor
     import numpy as np
     ML_AVAILABLE = True
 except Exception:
