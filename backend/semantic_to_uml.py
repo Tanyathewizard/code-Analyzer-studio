@@ -1,4 +1,4 @@
-import semantic_extractor
+from backend import semantic_extractor
 import json
 
 def semantic_to_uml(semantic_data, diagram_type="class"):
