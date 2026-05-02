@@ -1,5 +1,5 @@
 import json
-from semantic_extractor import SemanticExtractor
+from backend.semantic_extractor import SemanticExtractor
 
 SEMANTIC_PROMPT_HUMAN = """
 Explain this code clearly:
