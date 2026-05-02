@@ -2,11 +2,7 @@ fastapi
 uvicorn
 pydantic
 python-dotenv
-python-multipart
-
-autogen-agentchat
-autogen-core
-autogen-ext[openai]
+python-multipart==0.0.9
 
 google-generativeai
 openai
