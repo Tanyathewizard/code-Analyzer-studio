@@ -1,11 +1,10 @@
-// Resolve backend API URL
 const resolveApiUrl = () => {
-    // 1️⃣ Use Vercel environment variable if available
+    // If using Vercel env variable
     if (import.meta.env?.VITE_ANALYZER_API) {
         return import.meta.env.VITE_ANALYZER_API;
     }
 
-    // 2️⃣ Fallback to your deployed Render backend
+    // 🔥 PUT YOUR RENDER BACKEND LINK HERE
     return "https://code-analyzer-studio.onrender.com";
 };
 
