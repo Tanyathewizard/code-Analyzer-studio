@@ -9,8 +9,8 @@ try:
 except:
     gen = None
 from openai import OpenAI
-from api_config import APIConfig
-from api_limiter import apply_rate_limit, should_use_cache, cache_result
+from backend.api_config import APIConfig
+from backend.api_limiter import apply_rate_limit, should_use_cache, cache_result
 
 load_dotenv()
 
