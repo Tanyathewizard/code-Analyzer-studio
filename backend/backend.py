@@ -43,11 +43,12 @@ except Exception:
     WRAPPER_DB_AVAILABLE = False
 
 # Local graph/IR builders
+# Local graph/IR builders
 try:
-   from backend.cfg_builder import build_cfg
-   from backend.dfg_builder import build_dfg
-   from backend.graph_generator import generate_graphs, generate_cfg_svg, generate_dfg_svg
-   from backend.symbol_table import build_symbol_table
+    from backend.cfg_builder import build_cfg
+    from backend.dfg_builder import build_dfg
+    from backend.graph_generator import generate_graphs, generate_cfg_svg, generate_dfg_svg
+    from backend.symbol_table import build_symbol_table
     GRAPH_TOOLS_AVAILABLE = True
 except Exception:
     logger.exception("Failed to import graph/IR builder modules")
