@@ -12,9 +12,9 @@ import numpy as np
 from pathlib import Path
 
 # Import our ML modules
-from ml_data import CodePreprocessor, CodeFeatureExtractor, CodeDataset, EmbeddingGenerator, DataLoader
-from ml_models import QualityPredictorModel
-from ml_training import Trainer, RegressionMetrics, ModelEvaluator
+from backend.ml_data import CodePreprocessor, CodeFeatureExtractor, CodeDataset, EmbeddingGenerator, DataLoader
+from backend.ml_models import QualityPredictorModel
+from backend.ml_training import Trainer, RegressionMetrics, ModelEvaluator
 
 
 # Sample training data
