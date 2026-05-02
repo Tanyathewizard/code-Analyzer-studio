@@ -1,7 +1,7 @@
 # symbol_table.py
 import ast
 from typing import Dict
-from ir_model import FunctionInfo, ClassInfo, VariableInfo
+from backend.ir_model import FunctionInfo, ClassInfo, VariableInfo
 
 def build_symbol_table(source: str):
     tree = ast.parse(source)
