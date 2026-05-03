@@ -4,6 +4,7 @@ pydantic
 python-dotenv
 python-multipart==0.0.9
 
+google-generativeai 
 autogen-agentchat
 autogen-core
 autogen-ext[openai]
