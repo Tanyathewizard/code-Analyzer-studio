@@ -65,8 +65,8 @@ except Exception:
 
 # Semantic to UML Converter
 try:
-    from backend.uml_generator import generate_uml
-    UML_GENERATOR_AVAILABLE = True
+    from backend.semantic_to_uml import semantic_to_uml
+    SEMANTIC_TO_UML_AVAILABLE = True
 except Exception:
     logger.exception("Could not import semantic_to_uml")
     SEMANTIC_TO_UML_AVAILABLE = False
