@@ -7,7 +7,7 @@ import hashlib
 import json
 from typing import Any, Dict, Optional
 from collections import defaultdict
-from api_config import APIConfig
+from backend.api_config import APIConfig
 
 class RequestCache:
     """Simple in-memory cache with TTL"""
