@@ -9,44 +9,43 @@ def build_dfg(source: str) -> Dict:
         return {"nodes": [], "edges": []}
 
     nodes: Set[str] = set()
-    edges: List[Tuple[str, str]] = []
+    edges: Set[Tuple[str, str]] = set()   # ✅ use set to avoid duplicates
 
     class DFGVisitor(ast.NodeVisitor):
 
-        # ✅ Handle assignments (a = b)
+        # ================== ASSIGN ==================
         def visit_Assign(self, node: ast.Assign):
             targets = []
 
-            # Collect target variables
             for t in node.targets:
                 if isinstance(t, ast.Name):
                     targets.append(t.id)
                     nodes.add(t.id)
 
-            # Handle RHS value
+            # RHS is variable
             if isinstance(node.value, ast.Name):
                 source = node.value.id
                 nodes.add(source)
 
                 for target in targets:
-                    edges.append((source, target))
+                    edges.add((source, target))
 
-            # Handle function calls in RHS
+            # RHS is function call
             elif isinstance(node.value, ast.Call):
                 func_name = self.get_func_name(node.value)
                 nodes.add(func_name)
 
                 for target in targets:
-                    edges.append((func_name, target))
+                    edges.add((func_name, target))
 
                 for arg in node.value.args:
                     if isinstance(arg, ast.Name):
                         nodes.add(arg.id)
-                        edges.append((arg.id, func_name))
+                        edges.add((arg.id, func_name))
 
             self.generic_visit(node)
 
-        # ✅ Handle augmented assignments (a += b)
+        # ================== AUGMENTED ASSIGN ==================
         def visit_AugAssign(self, node: ast.AugAssign):
             if isinstance(node.target, ast.Name):
                 target = node.target.id
@@ -55,23 +54,31 @@ def build_dfg(source: str) -> Dict:
                 if isinstance(node.value, ast.Name):
                     source = node.value.id
                     nodes.add(source)
-                    edges.append((source, target))
+                    edges.add((source, target))
 
             self.generic_visit(node)
 
-        # ✅ Handle function calls (print(x), range(n), etc.)
+        # ================== FUNCTION CALL ==================
         def visit_Call(self, node: ast.Call):
             func_name = self.get_func_name(node)
             nodes.add(func_name)
 
+            # ✅ Handle method calls: obj.method()
+            if isinstance(node.func, ast.Attribute):
+                if isinstance(node.func.value, ast.Name):
+                    obj = node.func.value.id
+                    nodes.add(obj)
+                    edges.add((func_name, obj))   # append → even_list
+
+            # Arguments → function
             for arg in node.args:
                 if isinstance(arg, ast.Name):
                     nodes.add(arg.id)
-                    edges.append((arg.id, func_name))
+                    edges.add((arg.id, func_name))  # i → append / print
 
             self.generic_visit(node)
 
-        # ✅ Handle for-loops (for i in range(n))
+        # ================== FOR LOOP ==================
         def visit_For(self, node: ast.For):
             if isinstance(node.target, ast.Name):
                 loop_var = node.target.id
@@ -81,22 +88,22 @@ def build_dfg(source: str) -> Dict:
                     func_name = self.get_func_name(node.iter)
                     nodes.add(func_name)
 
-                    edges.append((func_name, loop_var))
+                    edges.add((func_name, loop_var))  # range → i
 
                     for arg in node.iter.args:
                         if isinstance(arg, ast.Name):
                             nodes.add(arg.id)
-                            edges.append((arg.id, func_name))
+                            edges.add((arg.id, func_name))  # limit → range
 
             self.generic_visit(node)
 
-        # ✅ Utility to extract function name
+        # ================== FUNCTION NAME ==================
         def get_func_name(self, node: ast.Call) -> str:
             if isinstance(node.func, ast.Name):
                 return node.func.id
             elif isinstance(node.func, ast.Attribute):
                 return node.func.attr
-            return "unknown_func"
+            return "call"
 
     # Run visitor
     try:
@@ -106,5 +113,5 @@ def build_dfg(source: str) -> Dict:
 
     return {
         "nodes": sorted(list(nodes)),
-        "edges": edges
+        "edges": list(edges)
     }
