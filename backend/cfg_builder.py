@@ -1,5 +1,6 @@
 import ast
-from typing import Dict
+from typing import Dict, List
+
 
 def build_cfg(source: str) -> Dict:
     try:
@@ -11,56 +12,96 @@ def build_cfg(source: str) -> Dict:
     edges = []
 
     def add_node(kind, name, lineno):
-        node_id = f"{kind}_{name}_{lineno}"  # <- replace ":" with "_"
+        node_id = f"{kind}_{name}_{lineno}"
         if node_id not in nodes:
-            nodes[node_id] = {"id": node_id, "kind": kind, "name": name, "lineno": lineno}
+            nodes[node_id] = {
+                "id": node_id,
+                "kind": kind,
+                "name": name,
+                "lineno": lineno
+            }
         return node_id
 
-    def walk_block(parent_id, block):
-        for n in ast.iter_child_nodes(block):
-            if isinstance(n, ast.If):
-                nid = add_node("if", f"if_{n.lineno}", n.lineno)
-                if parent_id:
-                    edges.append({"from": parent_id, "to": nid, "type": "control"})
-                walk_block(nid, n)
-                continue
+    # 🔥 CORE: process block sequentially
+    def process_block(statements, parent_id):
+        prev_id = parent_id
 
-            if isinstance(n, (ast.For, ast.While)):
-                nid = add_node("loop", f"loop_{n.lineno}", n.lineno)
-                if parent_id:
-                    edges.append({"from": parent_id, "to": nid, "type": "control"})
-                walk_block(nid, n)
-                continue
+        for stmt in statements:
 
-            if isinstance(n, ast.Call):
-                if isinstance(n.func, ast.Name):
-                    cname = n.func.id
-                elif isinstance(n.func, ast.Attribute):
-                    cname = n.func.attr
+            # ---- IF ----
+            if isinstance(stmt, ast.If):
+                nid = add_node("if", "if", stmt.lineno)
+                edges.append({"from": prev_id, "to": nid, "type": "control"})
+
+                # true branch
+                true_end = process_block(stmt.body, nid)
+
+                # false branch
+                if stmt.orelse:
+                    false_end = process_block(stmt.orelse, nid)
                 else:
-                    cname = "unknown"
-                cid = add_node("call", cname, getattr(n, "lineno", 0))
-                if parent_id:
-                    edges.append({"from": parent_id, "to": cid, "type": "call"})
-                continue
+                    false_end = nid
 
-            walk_block(parent_id, n)
+                # merge point
+                merge_id = add_node("merge", "merge", stmt.lineno)
+                edges.append({"from": true_end, "to": merge_id, "type": "control"})
+                edges.append({"from": false_end, "to": merge_id, "type": "control"})
 
+                prev_id = merge_id
+
+            # ---- LOOP ----
+            elif isinstance(stmt, (ast.For, ast.While)):
+                nid = add_node("loop", "loop", stmt.lineno)
+                edges.append({"from": prev_id, "to": nid, "type": "control"})
+
+                body_end = process_block(stmt.body, nid)
+
+                # loop back edge
+                edges.append({"from": body_end, "to": nid, "type": "loop"})
+
+                prev_id = nid
+
+            # ---- FUNCTION ----
+            elif isinstance(stmt, ast.FunctionDef):
+                nid = add_node("function", stmt.name, stmt.lineno)
+                edges.append({"from": prev_id, "to": nid, "type": "control"})
+
+                func_end = process_block(stmt.body, nid)
+                prev_id = func_end
+
+            # ---- FUNCTION CALL ----
+            elif isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call):
+                call = stmt.value
+                if isinstance(call.func, ast.Name):
+                    cname = call.func.id
+                elif isinstance(call.func, ast.Attribute):
+                    cname = call.func.attr
+                else:
+                    cname = "call"
+
+                nid = add_node("call", cname, stmt.lineno)
+                edges.append({"from": prev_id, "to": nid, "type": "call"})
+                prev_id = nid
+
+            # ---- NORMAL STATEMENT ----
+            else:
+                nid = add_node("stmt", type(stmt).__name__, getattr(stmt, "lineno", 0))
+                edges.append({"from": prev_id, "to": nid, "type": "control"})
+                prev_id = nid
+
+        return prev_id
+
+    # 🔥 START NODE
     start_id = add_node("start", "start", 0)
 
-    for stmt in getattr(tree, "body", []):
-        if isinstance(stmt, ast.FunctionDef):
-            fid = add_node("function", stmt.name, stmt.lineno)
-            edges.append({"from": start_id, "to": fid, "type": "control"})
-            walk_block(fid, stmt)
-        elif isinstance(stmt, ast.If):
-            nid = add_node("if", f"if_{stmt.lineno}", stmt.lineno)
-            edges.append({"from": start_id, "to": nid, "type": "control"})
-        elif isinstance(stmt, (ast.For, ast.While)):
-            nid = add_node("loop", f"loop_{stmt.lineno}", stmt.lineno)
-            edges.append({"from": start_id, "to": nid, "type": "control"})
-        else:
-            nid = add_node("stmt", type(stmt).__name__, getattr(stmt, "lineno", 0))
-            edges.append({"from": start_id, "to": nid, "type": "control"})
+    # 🔥 Process program sequentially
+    end_id = process_block(tree.body, start_id)
 
-    return {"nodes": list(nodes.values()), "edges": edges}
+    # 🔥 END NODE
+    end_node = add_node("end", "end", 9999)
+    edges.append({"from": end_id, "to": end_node, "type": "control"})
+
+    return {
+        "nodes": list(nodes.values()),
+        "edges": edges
+    }
