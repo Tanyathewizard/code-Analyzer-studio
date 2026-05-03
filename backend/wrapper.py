@@ -4,10 +4,23 @@ import time
 import requests
 import logging
 from dotenv import load_dotenv
+import os
+
 try:
-    import google.generativeai as gen
-except:
-    gen = None
+    import google.generativeai as genai
+
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        print("❌ GEMINI_API_KEY missing")
+        genai = None
+    else:
+        genai.configure(api_key=api_key)
+        print("✅ Gemini configured successfully")
+
+except Exception as e:
+    print("❌ Gemini import/init failed:", e)
+    genai = None
 from openai import OpenAI
 from backend.api_config import APIConfig
 from backend.api_limiter import apply_rate_limit, should_use_cache, cache_result
