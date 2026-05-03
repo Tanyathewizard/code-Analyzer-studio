@@ -1,11 +1,5 @@
 import os
 import json
-import time
-import requests
-import logging
-from dotenv import load_dotenv
-import os
-
 try:
     import google.generativeai as genai
 
@@ -21,6 +15,11 @@ try:
 except Exception as e:
     print("❌ Gemini import/init failed:", e)
     genai = None
+import time
+import requests
+import logging
+from dotenv import load_dotenv
+
 from openai import OpenAI
 from backend.api_config import APIConfig
 from backend.api_limiter import apply_rate_limit, should_use_cache, cache_result
@@ -48,8 +47,8 @@ if APIConfig.OPENAI_KEY:
 
 if APIConfig.GEMINI_KEY:
     try:
-        gen.configure(api_key=APIConfig.GEMINI_KEY)
-        GEMINI_MODEL = gen.GenerativeModel(APIConfig.GEMINI_MODEL)
+        genai.configure(api_key=APIConfig.GEMINI_KEY)
+        GEMINI_MODEL = genai.GenerativeModel(APIConfig.GEMINI_MODEL)
         logger.info("✓ Gemini client initialized")
     except Exception as e:
         logger.warning(f"Failed to init Gemini: {e}")
